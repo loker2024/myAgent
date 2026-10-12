@@ -37,6 +37,7 @@ myAgent/
 ├── AGENTS.md                    # 本文件（稳定约定）
 ├── CHANGELOG.md                 # 交付历史与验收证据（随每次 Part 交付追加）
 ├── README.md                    # 面向人的入口与使用说明
+├── .githooks/pre-commit         # 版本化钩子：禁止在 main 上直接提交（见 §2「分支职责」）
 ├── pyproject.toml               # uv 管理；ruff/mypy/pytest 配置集中于此
 ├── src/myagent/                 # 唯一包（src 布局，uv_build 后端）
 │   ├── core/                    # 底座：llm / message / config / agent / exceptions / _sync(同步包装)
@@ -49,6 +50,19 @@ myAgent/
 ```
 
 分层依赖方向**单向**：`tools` ← `core` ← `agents`。即 `core` 不得导入 `agents`，`agents` 不得互相导入（`reflection_agent` 复用 `react_agent` 的循环时，把公共部分下沉到 `core`）。
+
+### 分支职责
+
+- `main` 是集成线，**只能通过 `merge`（含 `--ff-only`）或 `rebase` 推进**：禁止在 `main` 上直接
+  `git commit`（含 `--amend`）、`cherry-pick`、`reset` —— 即在 `main` 上新增/改写提交都必须来自
+  「把别的分支合进来」或「把 `main` 重放到别处」。
+- 日常提交落在特性分支（当前为 `feature/core`）；复核通过后再 `merge` 合入 `main`。
+- 约束由版本化的 `.githooks/pre-commit` 落实：钩子在「当前分支是 `main` 且不是合并提交」时拒绝。
+  每个克隆需执行一次 `git config core.hooksPath .githooks`（`uv sync` 不会代劳）。
+- 客户端钩子只是约定性检查，可被 `git commit --no-verify` 绕过；真正的强制在服务端分支保护
+  （本仓库暂无远端，一旦有远端，**必须**开启 `main` 的保护规则）。
+- 推论：需要同时改 `main` 侧与特性分支的文件时（`CHANGELOG.md` / `README.md` / `docs/deviations.md`
+  首次出现在特性分支的提交里），先 `rebase` 再改，避免 add/add 冲突。
 
 ---
 
