@@ -1,10 +1,25 @@
 """myagent：跟练 Hello-Agents 教程（第 7 章起）并以现代写法重构的智能体框架。
 
 教程中 ``from hello_agents import SimpleAgent, HelloAgentsLLM, Config, Message, ToolRegistry``
-对应本项目 ``from myagent import HelloAgentsLLM, Config, Message``；``SimpleAgent`` 等
-agent 实现与 ``ToolRegistry`` 分别在 P3、P4 落地。
+对应本项目 ``from myagent import SimpleAgent, HelloAgentsLLM, Config, Message, ToolRegistry``。
 """
 
+from .agents import (
+    DEFAULT_EXECUTOR_PROMPT,
+    DEFAULT_PLANNER_PROMPT,
+    DEFAULT_PROMPTS,
+    DEFAULT_REACT_PROMPT,
+    DEFAULT_SYSTEM_PROMPT,
+    PlanAndSolveAgent,
+    PlanAndSolveResult,
+    ReActAgent,
+    ReActResult,
+    ReActStep,
+    ReflectionAgent,
+    SimpleAgent,
+    StopReason,
+    ToolCall,
+)
 from .core import (
     PROVIDERS,
     Agent,
@@ -27,13 +42,35 @@ from .core import (
     resolve_credentials,
     spec_for,
 )
+from .tools import (
+    AsyncToolExecutor,
+    CalculatorTool,
+    FunctionTool,
+    SearchTool,
+    Tool,
+    ToolChain,
+    ToolChainManager,
+    ToolInput,
+    ToolParameter,
+    ToolRegistry,
+    ToolStep,
+    ToolType,
+)
 
 __all__ = [
+    "DEFAULT_EXECUTOR_PROMPT",
+    "DEFAULT_PLANNER_PROMPT",
+    "DEFAULT_PROMPTS",
+    "DEFAULT_REACT_PROMPT",
+    "DEFAULT_SYSTEM_PROMPT",
     "PROVIDERS",
     "Agent",
     "AgentException",
+    "AsyncToolExecutor",
+    "CalculatorTool",
     "Config",
     "ConfigException",
+    "FunctionTool",
     "HelloAgentsException",
     "HelloAgentsLLM",
     "LLMAuthenticationError",
@@ -43,8 +80,26 @@ __all__ = [
     "LLMServerError",
     "Message",
     "MessageRole",
+    "PlanAndSolveAgent",
+    "PlanAndSolveResult",
     "ProviderSpec",
+    "ReActAgent",
+    "ReActResult",
+    "ReActStep",
+    "ReflectionAgent",
+    "SearchTool",
+    "SimpleAgent",
+    "StopReason",
+    "Tool",
+    "ToolCall",
+    "ToolChain",
+    "ToolChainManager",
     "ToolException",
+    "ToolInput",
+    "ToolParameter",
+    "ToolRegistry",
+    "ToolStep",
+    "ToolType",
     "default_model_for",
     "detect_provider",
     "resolve_credentials",
