@@ -57,13 +57,16 @@ myAgent/
   `git commit`（含 `--amend`）、`cherry-pick`、`reset` —— 即在 `main` 上新增/改写提交都必须来自
   「把别的分支合进来」或「把 `main` 重放到别处」。
 - 日常提交落在特性分支（当前为 `feature/core`）；复核通过后再 `merge` 合入 `main`。
-- 约束由版本化的 `.githooks/pre-commit` 落实：钩子在「当前分支是 `main` 且不是合并提交」时拒绝。
-  每个克隆需执行一次安装（`uv sync` 不会代劳）：
+- 约束由版本化钩子落实：`.githooks/main-guard.sh` 是判定（当前分支为 `main` 且不是合并提交 → 拒绝），
+  `.githooks/pre-commit` 与 `.githooks/prepare-commit-msg` 是两个入口。每个克隆需执行一次安装
+  （`uv sync` 不会代劳）：
 
   ```bash
-  cp .githooks/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
+  cp .githooks/* .git/hooks/ && chmod +x .git/hooks/main-guard.sh .git/hooks/pre-commit .git/hooks/prepare-commit-msg
   ```
 
+  两个入口缺一不可：`pre-commit` 覆盖普通提交、`--amend` 与合并；而 **`cherry-pick` 只触发
+  `prepare-commit-msg`，不触发 `pre-commit`**（实测），只装前者会让 cherry-pick 把提交直接落到 `main` 上。
   **禁止**改用 `git config core.hooksPath .githooks`：`.githooks/` 是工作树里的文件，切到尚未
   合入该目录的分支（例如此刻的 `main`）时会随 checkout 一起消失，钩子静默失效 —— 已实测。
 - 客户端钩子只是约定性检查，可被 `git commit --no-verify` 绕过；真正的强制在服务端分支保护

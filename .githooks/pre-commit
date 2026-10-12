@@ -1,24 +1,3 @@
 #!/bin/sh
-# 仓库约定（AGENTS.md「2. 目录结构与职责 / 分支职责」）：
-#   main 只能通过 merge（含 --ff-only）或 rebase 推进，禁止直接在 main 上提交。
-#
-# 判定：
-#   - HEAD 处于游离状态（rebase / cherry-pick 过程中）→ 放行
-#   - 存在 MERGE_HEAD（正在生成合并提交）→ 放行（merge 是允许的推进方式）
-#   - 其余情况且当前分支为 main → 拒绝（含直接 commit、--amend、cherry-pick）
-#
-# 注意：客户端钩子是约定性检查，可用 `git commit --no-verify` 绕过；
-# 真正的强制在服务端分支保护（本仓库暂无远端）。
-
-branch=$(git symbolic-ref --quiet --short HEAD 2>/dev/null) || exit 0
-
-[ "$branch" = "main" ] || exit 0
-
-if git rev-parse --quiet --verify MERGE_HEAD >/dev/null 2>&1; then
-    exit 0
-fi
-
-echo "拒绝提交：main 只能通过 merge / rebase 推进（AGENTS.md「分支职责」）。" >&2
-echo "请在特性分支上提交，再以 merge 或 rebase 合入 main。" >&2
-echo "确需绕过（例如修复钩子本身）可用 git commit --no-verify。" >&2
-exit 1
+# main 只能通过 merge / rebase 推进：判定见 main-guard.sh（与钩子同级安装到 .git/hooks/）。
+exec "$(git rev-parse --git-path hooks)/main-guard.sh"

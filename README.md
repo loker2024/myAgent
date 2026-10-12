@@ -11,7 +11,7 @@
 ```bash
 uv sync
 # 启用分支约束钩子：main 只能通过 merge / rebase 推进
-cp .githooks/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
+cp .githooks/* .git/hooks/ && chmod +x .git/hooks/main-guard.sh .git/hooks/pre-commit .git/hooks/prepare-commit-msg
 ```
 
 ## 常用命令
