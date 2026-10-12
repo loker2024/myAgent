@@ -58,7 +58,14 @@ myAgent/
   「把别的分支合进来」或「把 `main` 重放到别处」。
 - 日常提交落在特性分支（当前为 `feature/core`）；复核通过后再 `merge` 合入 `main`。
 - 约束由版本化的 `.githooks/pre-commit` 落实：钩子在「当前分支是 `main` 且不是合并提交」时拒绝。
-  每个克隆需执行一次 `git config core.hooksPath .githooks`（`uv sync` 不会代劳）。
+  每个克隆需执行一次安装（`uv sync` 不会代劳）：
+
+  ```bash
+  cp .githooks/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
+  ```
+
+  **禁止**改用 `git config core.hooksPath .githooks`：`.githooks/` 是工作树里的文件，切到尚未
+  合入该目录的分支（例如此刻的 `main`）时会随 checkout 一起消失，钩子静默失效 —— 已实测。
 - 客户端钩子只是约定性检查，可被 `git commit --no-verify` 绕过；真正的强制在服务端分支保护
   （本仓库暂无远端，一旦有远端，**必须**开启 `main` 的保护规则）。
 - 推论：需要同时改 `main` 侧与特性分支的文件时（`CHANGELOG.md` / `README.md` / `docs/deviations.md`

@@ -10,7 +10,8 @@
 
 ```bash
 uv sync
-git config core.hooksPath .githooks   # 启用分支约束钩子：main 只能通过 merge / rebase 推进
+# 启用分支约束钩子：main 只能通过 merge / rebase 推进
+cp .githooks/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
 ```
 
 ## 常用命令
