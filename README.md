@@ -6,6 +6,10 @@
 - 工程约定（**改代码前必读**）：[`AGENTS.md`](./AGENTS.md)
 - 与教程的偏离清单：[`docs/deviations.md`](./docs/deviations.md)
 
+## 开发约定
+
+提交代码前请先阅读 [`AGENTS.md`](./AGENTS.md)，其中记录了分支、测试和验收要求。
+
 ## 安装
 
 ```bash
