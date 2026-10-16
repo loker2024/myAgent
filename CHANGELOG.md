@@ -9,6 +9,24 @@
 
 ## [未发布]
 
+### 发布基础设施与文档补齐（2026-10-16）
+
+新增：
+
+- `reference/hello-agents/SOURCE.md`：**补建**。`README.md`、`AGENTS.md` §1、`CHANGELOG.md` 三处此前引用该文件，
+  但快照里并无此文件（断链）。内容为来源仓库、commit `78dcd8f4821c96ba52ed60d72d523a7173b0206a`（2026-10-12）、
+  收录范围（`code/chapter4`、`code/chapter7`、`docs/chapter7`）与 CC 许可条款。
+- `NOTICE.md`：第三方内容声明 —— `reference/hello-agents/` 为 **CC BY-NC-SA 4.0** 快照
+  （署名 / 非商业性使用 / 相同方式共享，上游 `LICENSE.txt` 经 `gh api` 核实）。
+- 远端 `origin`：<https://github.com/loker2024/myAgent>（公开）；`main` 启用 ruleset `protect-main`
+  （`deletion` + `non_fast_forward` + `pull_request`，`allowed_merge_methods` 仅 `merge`）。
+
+变更：
+
+- `AGENTS.md` §2：去掉「本仓库暂无远端」，改记远端地址与保护规则（含 ruleset id）。
+- `README.md`：基线快照一行补 `NOTICE.md` 链接。
+- `.gitignore`：忽略 `.pycache/`（`.env` 的 `PYTHONPYCACHEPREFIX` 统一字节码缓存位置）。
+
 ### P4 — 7.5 工具系统（Tool 基类 / 注册表 / 内置工具）
 
 新增：
@@ -151,6 +169,26 @@
 ---
 
 ## 验收证据
+
+### 发布基础设施（2026-10-16）
+
+命令与结果：
+
+```
+uv run ruff format --check .   → 45 files already formatted
+uv run ruff check .            → All checks passed!
+uv run mypy src tests examples → Success: no issues found in 40 source files
+uv run pytest -q               → 236 passed in 39.93s
+```
+
+- 合入路径：PR [#1](https://github.com/loker2024/myAgent/pull/1)（第 7 章 P1~P5，merge commit `edc7580`）、
+  PR [#2](https://github.com/loker2024/myAgent/pull/2)（`AGENTS.md` §2 更新，merge commit `415c40a`），
+  均经服务端合并提交进入 `main`。
+- **保护规则实测生效**（非客户端拒绝）：把确为 fast-forward 的 `feature/core` 直推 `main`，
+  服务端返回 `remote: Changes must be made through a pull request.` 与
+  `! [remote rejected] feature/core -> main (push declined due to repository rule violations)`。
+- 公开推送前扫描全部 tracked 文件（`git grep -E 'sk-|gho_|tvly-|AIza'`）：无真实密钥命中；
+  `reference/hello-agents/code/chapter4/.env copy` 内容为 `YOUR-API-KEY` 等占位符。
 
 ### P1 + P2（2026-10-12）
 
