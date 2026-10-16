@@ -69,8 +69,12 @@ myAgent/
   `prepare-commit-msg`，不触发 `pre-commit`**（实测），只装前者会让 cherry-pick 把提交直接落到 `main` 上。
   **禁止**改用 `git config core.hooksPath .githooks`：`.githooks/` 是工作树里的文件，切到尚未
   合入该目录的分支（例如此刻的 `main`）时会随 checkout 一起消失，钩子静默失效 —— 已实测。
-- 客户端钩子只是约定性检查，可被 `git commit --no-verify` 绕过；真正的强制在服务端分支保护
-  （本仓库暂无远端，一旦有远端，**必须**开启 `main` 的保护规则）。
+- 客户端钩子只是约定性检查，可被 `git commit --no-verify` 绕过；真正的强制在服务端分支保护。
+  远端 `origin` 为 <https://github.com/loker2024/myAgent>，`main` 上已启用 ruleset `protect-main`：
+  `deletion` + `non_fast_forward` + `pull_request`（`required_approving_review_count = 0`，
+  单人仓库无法自我 approve），且 `allowed_merge_methods` **只留 `merge`** —— squash / rebase
+  合并会在 `main` 上产生非合并提交，与本节首条相悖。
+  规则由 `gh api repos/loker2024/myAgent/rulesets` 维护（当前 ruleset id `25226345`）。
 - 推论：需要同时改 `main` 侧与特性分支的文件时（`CHANGELOG.md` / `README.md` / `docs/deviations.md`
   首次出现在特性分支的提交里），先 `rebase` 再改，避免 add/add 冲突。
 
