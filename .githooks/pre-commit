@@ -1,0 +1,3 @@
+#!/bin/sh
+# main 只能通过 merge / rebase 推进：判定见 main-guard.sh（与钩子同级安装到 .git/hooks/）。
+exec "$(git rev-parse --git-path hooks)/main-guard.sh"

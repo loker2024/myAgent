@@ -1,0 +1,4 @@
+#!/bin/sh
+# 与 pre-commit 同一判定（main-guard.sh）。这里必须再挂一次，因为实测 git 在 cherry-pick 时
+# 只触发 prepare-commit-msg，不触发 pre-commit —— 少了它，cherry-pick 能直接把提交落到 main 上。
+exec "$(git rev-parse --git-path hooks)/main-guard.sh"
