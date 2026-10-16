@@ -1,6 +1,8 @@
 # Python-generated files
 __pycache__/
 *.py[oc]
+# 字节码缓存统一位置（由 .env 的 PYTHONPYCACHEPREFIX 指定）
+.pycache/
 build/
 dist/
 wheels/
