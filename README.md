@@ -2,7 +2,7 @@
 
 跟练 [Hello-Agents](https://github.com/datawhalechina/hello-agents) 教程（自第 7 章「构建你的智能体框架」起），以现代 Python 写法重构的智能体框架。
 
-- 教程基线快照与来源 commit：`reference/hello-agents/SOURCE.md`
+- 教程基线快照与来源 commit：`reference/hello-agents/SOURCE.md`（第三方内容与许可见 [`NOTICE.md`](./NOTICE.md)）
 - 工程约定（**改代码前必读**）：[`AGENTS.md`](./AGENTS.md)
 - 与教程的偏离清单：[`docs/deviations.md`](./docs/deviations.md)
 
